@@ -55,16 +55,13 @@
       width: 100%;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       border-radius: 12px;
-      font-size: 0.45em;
-      line-height: 1.2;
+      font-size: 0.4em;
+      line-height: 1.15;
       margin: 10px 0;
-      max-height: none;
-      overflow: visible;
-    }
-
-    .reveal pre code {
-      max-height: none;
-      overflow: visible;
+      max-height: none !important;
+      overflow: visible !important;
+      overflow-x: visible !important;
+      overflow-y: visible !important;
     }
 
     .reveal code {
@@ -337,11 +334,11 @@
 
     /* Scroll para secciones con mucho contenido */
     .reveal .slides section.has-scroll {
-      display: block !important;
-      overflow-y: auto !important;
-      max-height: 90vh;
-      padding: 20px 40px;
-    }
+  display: block !important;
+  overflow-y: visible !important;  /* ← PERMITIR QUE SE VEA TODO */
+  max-height: none;                /* ← ELIMINAR LÍMITE */
+  padding: 20px 40px;
+}
 
     /* Esconder scrollbar pero mantener funcionalidad */
     .reveal .slides section.has-scroll::-webkit-scrollbar {
@@ -413,7 +410,7 @@
             <p style="font-size: 0.8em;">BST y recorridos</p>
           </div>
           <div class="intro-card fragment">
-            <h4>✅ Conclusiones</h4>
+            <h4>Conclusiones</h4>
             <p style="font-size: 0.8em;">Resumen final</p>
           </div>
         </div>
@@ -438,10 +435,10 @@
           <div class="fragment" style="margin-top: 1em;">
             <h3>Ventajas principales</h3>
             <ul class="compact">
-              <li>✅ Fácil de aprender</li>
-              <li>✅ Multiplataforma</li>
-              <li>✅ Gran comunidad</li>
-              <li>✅ Ideal para IA, web, automatización</li>
+              <li>Fácil de aprender</li>
+              <li>Multiplataforma</li>
+              <li>Gran comunidad</li>
+              <li>Ideal para IA, web, automatización</li>
             </ul>
           </div>
         </section>
@@ -741,8 +738,119 @@ class ListaDobleMaterias:
               <ul class="compact">
                 <li><code>push()</code> — Agregar al tope</li>
                 <li><code>pop()</code> — Quitar del tope</li>
-                <li><code>peek()</code> — Ver el tope</li>
-                <li><code>is_empty()</code> — Verificar vacía</li>
+                <li><code>ver_tope()</code> — Ver el tope</li>
+                <li><code>esta_vacia()</code> — Verificar vacía</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Aplicaciones</h4>
+              <ul class="compact">
+                <li>Control de recursión</li>
+                <li>Deshacer/Rehacer</li>
+                <li>Evaluación de expresiones</li>
+                <li>Navegación (historial)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="visual-demo fragment">
+            <h4 style="text-align: center; margin-bottom: 15px;">Visualización de Pila</h4>
+            <div class="stack-visual">
+              <div class="stack-item">Documento C</div>
+              <div class="stack-item">Documento B</div>
+              <div class="stack-item">Documento A</div>
+              <p style="margin-top: 10px; text-align: center; color: #fbbf24;">⬆️ Tope (LIFO)</p>
+            </div>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #9f1239 0%, #be123c 100%)" class="has-scroll">
+          <h3>Código: Implementación de Pila (Parte 1)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Clase Nodo y Pila</div>
+            <pre><code class="language-python" data-line-numbers="1-5|7-16|18-27"># Definimos un nodo que guarda el dato y una referencia al siguiente
+class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+# Definimos la clase Pila
+class Pila:
+    def __init__(self):
+        self.tope = None  # El elemento superior de la pila
+
+    def esta_vacia(self):
+        return self.tope is None
+
+    def push(self, dato):
+        """Agrega un nuevo elemento a la pila"""
+        nuevo_nodo = Nodo(dato)
+        nuevo_nodo.siguiente = self.tope  # El nuevo nodo apunta al anterior tope
+        self.tope = nuevo_nodo  # Ahora el nuevo nodo es el tope
+
+    def pop(self):
+        """Elimina y devuelve el elemento superior de la pila"""
+        if self.esta_vacia():
+            print("La pila está vacía.")
+            return None
+        dato = self.tope.dato
+        self.tope = self.tope.siguiente  # El nuevo tope es el siguiente nodo
+        return dato</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #9f1239 0%, #be123c 100%)" class="has-scroll">
+          <h3>Código: Implementación de Pila (Parte 2)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Métodos Adicionales</div>
+            <pre><code class="language-python" data-line-numbers="1-8|10-18">    def ver_tope(self):
+        """Devuelve el elemento superior sin eliminarlo"""
+        if self.esta_vacia():
+            print("La pila está vacía.")
+            return None
+        return self.tope.dato
+
+    def mostrar(self):
+        """Muestra todos los elementos de la pila"""
+        actual = self.tope
+        print("Pila (de arriba hacia abajo):")
+        while actual:
+            print(f"→ {actual.dato}")
+            actual = actual.siguiente
+
+# Ejemplo de uso
+pila = Pila()
+pila.push("A")
+pila.push("B")
+pila.push("C")
+pila.mostrar()
+
+print("\nElemento en el tope:", pila.ver_tope())
+print("Elemento sacado:", pila.pop())
+pila.mostrar()</code></pre>
+          </div>
+        </section>
+      </section>
+
+      <!-- 5. COLAS -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #075985 0%, #0369a1 100%)" class="has-scroll">
+          <h2 class="slide-title" style="border-color: #38bdf8;">5️⃣ Colas (Queues)</h2>
+          <p class="author-tag">👤 Axel Rodríguez</p>
+          
+          <div class="highlight-box fragment">
+            <h3>Principio FIFO</h3>
+            <p><strong>First In, First Out</strong> — El primero en entrar es el primero en salir</p>
+          </div>
+
+          <div class="grid-2 fragment">
+            <div>
+              <h4>Operaciones</h4>
+              <ul class="compact">
+                <li><code>encolar()</code> — Agregar al final</li>
+                <li><code>desencolar()</code> — Quitar del frente</li>
+                <li><code>ver_primero()</code> — Ver el frente</li>
+                <li><code>esta_vacia()</code> — Verificar vacía</li>
               </ul>
             </div>
             <div>
@@ -759,12 +867,12 @@ class ListaDobleMaterias:
           <div class="visual-demo fragment">
             <h4 style="text-align: center; margin-bottom: 15px;">Visualización de Cola</h4>
             <div class="queue-visual">
-              <div style="font-weight: bold;">FRONT →</div>
+              <div style="font-weight: bold; color: #fbbf24;">FRONT →</div>
               <div class="queue-item">Trabajo 1</div>
               <div class="queue-item">Trabajo 2</div>
               <div class="queue-item">Trabajo 3</div>
               <div class="queue-item">Trabajo 4</div>
-              <div style="font-weight: bold;">← REAR</div>
+              <div style="font-weight: bold; color: #fbbf24;">← REAR</div>
             </div>
           </div>
         </section>
@@ -773,38 +881,38 @@ class ListaDobleMaterias:
           <h3>Código: Implementación de Cola</h3>
           <div class="code-section">
             <div class="code-label">💻 Clase Cola</div>
-            <pre><code class="language-python" data-line-numbers="1-7|9-17|19-29"># Clase Cola
+            <pre><code class="language-python" data-line-numbers="1-7|9-17|19-30"># Clase Cola
 class Cola:
     def __init__(self):
-        self.items = []
+        self.items = []  # Usamos una lista interna para guardar los elementos
 
     def esta_vacia(self):
-        """Devuelve True si la cola está vacía"""
+        """Devuelve True si la cola está vacía."""
         return len(self.items) == 0
 
     def encolar(self, elemento):
-        """Agrega un elemento al final de la cola"""
+        """Agrega un elemento al final de la cola (enqueue)."""
         self.items.append(elemento)
 
     def desencolar(self):
-        """Saca el primer elemento de la cola"""
+        """Saca el primer elemento de la cola (dequeue)."""
         if self.esta_vacia():
-            print("La cola está vacía")
+            print("La cola está vacía, no se puede desencolar.")
             return None
-        return self.items.pop(0)  # Elimina el primero
+        return self.items.pop(0)  # pop(0) quita el primer elemento
 
     def ver_primero(self):
-        """Devuelve el primer elemento sin quitarlo"""
+        """Devuelve el primer elemento sin quitarlo."""
         if self.esta_vacia():
             return None
         return self.items[0]
 
     def tamaño(self):
-        """Devuelve el número de elementos"""
+        """Devuelve el número de elementos en la cola."""
         return len(self.items)
 
     def __str__(self):
-        """Representación en texto"""
+        """Representación en texto de la cola."""
         return f"Cola: {self.items}"</code></pre>
           </div>
         </section>
@@ -813,28 +921,26 @@ class Cola:
           <h3>Código: Uso de Cola</h3>
           <div class="code-section">
             <div class="code-label">💻 Ejemplo de Uso</div>
-            <pre><code class="language-python" data-line-numbers="1-9|11-19"># Crear cola y agregar clientes
+            <pre><code class="language-python" data-line-numbers="1-9|11-17"># Ejemplo de uso:
 cola = Cola()
+
 cola.encolar("Cliente 1")
 cola.encolar("Cliente 2")
 cola.encolar("Cliente 3")
 
-print(cola)  # Cola: ['Cliente 1', 'Cliente 2', 'Cliente 3']
-print("Tamaño:", cola.tamaño())  # 3
-print("Primero:", cola.ver_primero())  # Cliente 1
+print(cola)  # Muestra el contenido de la cola
 
-# Atender clientes (FIFO)
-atendido = cola.desencolar()
-print("Atendiendo:", atendido)  # Cliente 1
+print("Atendiendo:", cola.desencolar())
+print("Siguiente en la cola:", cola.ver_primero())
+print("Tamaño actual:", cola.tamaño())
 
-print(cola)  # Cola: ['Cliente 2', 'Cliente 3']
-print("Siguiente:", cola.ver_primero())  # Cliente 2
+print(cola)
 
-# Nota: Para mejor eficiencia, usar collections.deque
+# Nota: Para mejor eficiencia en Python, usar collections.deque
 # from collections import deque
 # cola = deque()
-# cola.append(x)  # encolar
-# cola.popleft()  # desencolar (O(1) en lugar de O(n))</code></pre>
+# cola.append(elemento)  # encolar O(1)
+# cola.popleft()  # desencolar O(1) en lugar de pop(0) que es O(n)</code></pre>
           </div>
         </section>
       </section>
