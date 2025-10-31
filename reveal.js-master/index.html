@@ -1,40 +1,1452 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estructuras de Datos en Python — Presentación Completa</title>
 
-		<title>reveal.js</title>
+  <!-- Reveal.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/moon.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css">
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --secondary: #10b981;
+      --accent-arrays: #3b82f6;
+      --accent-listas: #06b6d4;
+      --accent-pilas: #ec4899;
+      --accent-colas: #0ea5e9;
+      --accent-conjuntos: #34d399;
+      --accent-arboles: #f59e0b;
+    }
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+    .reveal {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+    .reveal h1, .reveal h2, .reveal h3 {
+      text-transform: none;
+      font-weight: 700;
+    }
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
-</html>
+    .reveal section {
+      text-align: left;
+      height: 100%;
+      display: flex !important;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+    }
+
+    .reveal .slides {
+      text-align: left;
+    }
+
+    .reveal .slides section {
+      box-sizing: border-box;
+      padding: 20px 40px;
+      overflow: hidden;
+    }
+
+    .reveal pre {
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-radius: 12px;
+      font-size: 0.45em;
+      line-height: 1.2;
+      margin: 10px 0;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .reveal pre code {
+      max-height: none;
+      overflow: visible;
+    }
+
+    .reveal code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      padding: 2px 6px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 4px;
+      color: #fbbf24;
+    }
+
+    .slide-title {
+      font-size: 1.8em;
+      margin-bottom: 0.3em;
+      padding-bottom: 0.2em;
+      border-bottom: 3px solid;
+      color: #ffffff;
+    }
+
+    .author-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 20px;
+      font-size: 0.65em;
+      margin-top: 0.3em;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .code-section {
+      margin-top: 0.8em;
+      margin-bottom: 0.8em;
+    }
+
+    .code-label {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      color: #fbbf24;
+      padding: 6px 14px;
+      border-radius: 8px 8px 0 0;
+      font-weight: 700;
+      font-size: 0.75em;
+      display: inline-block;
+      border: 2px solid #475569;
+    }
+
+    .visual-demo {
+      background: rgba(0,0,0,0.3);
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 0.8em;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .array-visual {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .array-item {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      min-width: 55px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
+      font-size: 1.1em;
+    }
+
+    .array-item:hover {
+      transform: translateY(-5px) scale(1.05);
+    }
+
+    .array-item small {
+      font-size: 0.7em;
+      color: #e0e7ff;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .stack-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stack-item {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      color: #ffffff;
+      padding: 10px 60px;
+      border-radius: 8px;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      font-size: 1em;
+    }
+
+    .queue-visual {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .queue-item {
+      background: linear-gradient(135deg, #06b6d4, #0284c7);
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      font-size: 0.9em;
+    }
+
+    .tree-visual {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.5em;
+    }
+
+    .highlight-box {
+      background: rgba(0,0,0,0.3);
+      border-left: 4px solid #10b981;
+      padding: 12px 15px;
+      margin: 0.8em 0;
+      border-radius: 4px;
+      color: #ffffff;
+    }
+
+    .highlight-box h3, .highlight-box h4 {
+      color: #fbbf24;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+
+    .highlight-box p {
+      margin: 0.5em 0;
+      color: #e5e7eb;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 0.8em;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .fragment.highlight-current-blue {
+      opacity: 1;
+    }
+
+    .fragment.highlight-current-blue.current-fragment {
+      color: #60a5fa;
+    }
+
+    ul.compact {
+      margin: 0.4em 0;
+      font-size: 0.85em;
+      color: #e5e7eb;
+    }
+
+    ul.compact li {
+      margin: 0.25em 0;
+      line-height: 1.5;
+    }
+
+    ul.compact code {
+      background: rgba(0,0,0,0.5);
+      color: #fcd34d;
+      padding: 2px 6px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 1em;
+    }
+
+    .intro-card {
+      background: rgba(0,0,0,0.3);
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid rgba(255,255,255,0.2);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .intro-card:hover {
+      transform: translateY(-3px);
+      border-color: #10b981;
+    }
+
+    .intro-card h4 {
+      color: #fbbf24;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+      font-size: 1em;
+    }
+
+    .intro-card p {
+      color: #d1d5db;
+      margin: 0;
+      font-size: 0.85em;
+    }
+
+    /* Estilos para tablas */
+    .reveal table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.75em;
+    }
+
+    .reveal table th {
+      background: rgba(0,0,0,0.4);
+      color: #fbbf24;
+      font-weight: 700;
+      padding: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .reveal table td {
+      padding: 6px 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #e5e7eb;
+    }
+
+    .reveal table tr.fragment {
+      background: rgba(0,0,0,0.2);
+    }
+
+    /* Ajustes para texto general */
+    .reveal p {
+      color: #e5e7eb;
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+
+    .reveal h3 {
+      color: #ffffff;
+      font-size: 1.3em;
+      margin-top: 0.5em;
+      margin-bottom: 0.4em;
+    }
+
+    .reveal h4 {
+      color: #fbbf24;
+      font-size: 1.1em;
+      margin-top: 0.5em;
+      margin-bottom: 0.3em;
+    }
+
+    .reveal strong {
+      color: #fbbf24;
+    }
+
+    .reveal em {
+      color: #a5f3fc;
+    }
+
+    /* Scroll para secciones con mucho contenido */
+    .reveal .slides section.has-scroll {
+      display: block !important;
+      overflow-y: auto !important;
+      max-height: 90vh;
+      padding: 20px 40px;
+    }
+
+    /* Esconder scrollbar pero mantener funcionalidad */
+    .reveal .slides section.has-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .reveal .slides section.has-scroll::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+    }
+
+    .reveal .slides section.has-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 4px;
+    }
+
+    .reveal .slides section.has-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- PORTADA -->
+      <section data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+        <h1 style="font-size: 2.5em; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">Estructuras de Datos con Python</h1>
+        <h3 style="margin-top: 1em;">Guía Completa con Código y Visualizaciones</h3>
+        <p style="margin-top: 2em; font-size: 0.8em;">
+          <strong>Autores:</strong> Dayeli Ventura, Saulo León, Pablo Rojas,<br>
+          Haziel Ramírez, Axel Rodríguez, Luis Quiroz, Jesús Alvarado
+        </p>
+        <p style="margin-top: 2em; font-size: 0.7em; opacity: 0.8;">
+          Presiona → para navegar | ESC para vista general
+        </p>
+      </section>
+
+      <!-- ÍNDICE -->
+      <section data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+        <h2 class="slide-title" style="border-color: var(--secondary);">📚 Contenido</h2>
+        <div class="intro-grid">
+          <div class="intro-card fragment">
+            <h4>1️⃣ Introducción</h4>
+            <p style="font-size: 0.8em;">Conceptos básicos de Python</p>
+          </div>
+          <div class="intro-card fragment">
+            <h4>2️⃣ Arrays y Cadenas</h4>
+            <p style="font-size: 0.8em;">Estructuras secuenciales</p>
+          </div>
+          <div class="intro-card fragment">
+            <h4>3️⃣ Listas</h4>
+            <p style="font-size: 0.8em;">Enlazadas simples y dobles</p>
+          </div>
+          <div class="intro-card fragment">
+            <h4>4️⃣ Pilas (Stacks)</h4>
+            <p style="font-size: 0.8em;">Principio LIFO</p>
+          </div>
+          <div class="intro-card fragment">
+            <h4>5️⃣ Colas (Queues)</h4>
+            <p style="font-size: 0.8em;">Principio FIFO</p>
+          </div>
+          <div class="intro-card fragment">
+            <h4>6️⃣ Conjuntos y Diccionarios</h4>
+            <p style="font-size: 0.8em;">Sets y Hash Tables</p>
+          </div>
+          <div class="intro-card fragment">
+            <h4>7️⃣ Árboles</h4>
+            <p style="font-size: 0.8em;">BST y recorridos</p>
+          </div>
+          <div class="intro-card fragment">
+            <h4>✅ Conclusiones</h4>
+            <p style="font-size: 0.8em;">Resumen final</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1. INTRODUCCIÓN -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)" class="has-scroll">
+          <h2 class="slide-title" style="border-color: #60a5fa;">1️⃣ Introducción a Python</h2>
+          <p class="author-tag">👤 Dayeli Ventura</p>
+          
+          <div class="highlight-box fragment">
+            <h3>¿Qué es Python?</h3>
+            <ul class="compact">
+              <li>Creado por <strong>Guido van Rossum</strong> en 1991</li>
+              <li>Lenguaje interpretado y de alto nivel</li>
+              <li>Sintaxis clara y legible</li>
+              <li>Amplio ecosistema de librerías</li>
+            </ul>
+          </div>
+
+          <div class="fragment" style="margin-top: 1em;">
+            <h3>Ventajas principales</h3>
+            <ul class="compact">
+              <li>✅ Fácil de aprender</li>
+              <li>✅ Multiplataforma</li>
+              <li>✅ Gran comunidad</li>
+              <li>✅ Ideal para IA, web, automatización</li>
+            </ul>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)" class="has-scroll">
+          <h3>Tipos de Datos Básicos</h3>
+          
+          <table style="font-size: 0.8em; width: 100%; margin-top: 1em;">
+            <thead>
+              <tr style="background: rgba(255,255,255,0.1);">
+                <th style="padding: 10px;">Tipo</th>
+                <th style="padding: 10px;">Ejemplo</th>
+                <th style="padding: 10px;">Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fragment"><td style="padding: 8px;"><code>int</code></td><td>10</td><td>Número entero</td></tr>
+              <tr class="fragment"><td style="padding: 8px;"><code>float</code></td><td>10.5</td><td>Número decimal</td></tr>
+              <tr class="fragment"><td style="padding: 8px;"><code>str</code></td><td>"hola"</td><td>Cadena de texto</td></tr>
+              <tr class="fragment"><td style="padding: 8px;"><code>bool</code></td><td>True/False</td><td>Valor lógico</td></tr>
+              <tr class="fragment"><td style="padding: 8px;"><code>list</code></td><td>[1,2,3]</td><td>Lista ordenada</td></tr>
+              <tr class="fragment"><td style="padding: 8px;"><code>dict</code></td><td>{"k":"v"}</td><td>Diccionario</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)" class="has-scroll">
+          <h3>Código: Conceptos Básicos</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Python Básico</div>
+            <pre><code class="language-python" data-line-numbers="1-3|5-8|10-12"># Sintaxis con indentación
+if 5 > 2:
+    print("Cinco es mayor que dos")
+
+# Variables (tipado dinámico)
+nombre = "María"
+edad = 19
+peso = 53.5
+
+# Operaciones básicas
+resultado = edad * 2
+print(f"{nombre} tiene {edad} años")</code></pre>
+          </div>
+        </section>
+      </section>
+
+      <!-- 2. ARRAYS Y CADENAS -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #581c87 0%, #7c3aed 100%)" class="has-scroll">
+          <h2 class="slide-title" style="border-color: #a78bfa;">2️⃣ Arrays y Cadenas</h2>
+          <p class="author-tag">👤 Saulo León</p>
+          
+          <div class="grid-2">
+            <div class="fragment">
+              <h3>Cadenas (str)</h3>
+              <ul class="compact">
+                <li>Secuencias de caracteres</li>
+                <li><strong>Inmutables</strong></li>
+                <li>Indexación y slicing</li>
+                <li>Muchos métodos útiles</li>
+              </ul>
+            </div>
+            
+            <div class="fragment">
+              <h3>Listas (list)</h3>
+              <ul class="compact">
+                <li>Colecciones ordenadas</li>
+                <li><strong>Mutables</strong></li>
+                <li>Pueden contener tipos mixtos</li>
+                <li>Operaciones: append, remove, etc.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="visual-demo fragment">
+            <h4 style="text-align: center; margin-bottom: 15px;">Visualización de Array</h4>
+            <div class="array-visual">
+              <div class="array-item">5<br><small>idx 0</small></div>
+              <div class="array-item">15<br><small>idx 1</small></div>
+              <div class="array-item">25<br><small>idx 2</small></div>
+              <div class="array-item">35<br><small>idx 3</small></div>
+              <div class="array-item">45<br><small>idx 4</small></div>
+            </div>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #581c87 0%, #7c3aed 100%)" class="has-scroll">
+          <h3>Código: Cadenas</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Operaciones con Strings</div>
+            <pre><code class="language-python" data-line-numbers="1-7|9-11"># Cadenas (Strings)
+mensaje = "Hola Python"
+print(mensaje[0])        # 'H'
+print(mensaje[0:4])      # 'Hola'
+print(mensaje.upper())   # 'HOLA PYTHON'
+print(mensaje.split())   # ['Hola', 'Python']
+
+# Concatenación
+saludo = "Hola" + " " + "Mundo"
+nombre = "Ana"
+print(f"Bienvenida {nombre}!")  # f-strings</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #581c87 0%, #7c3aed 100%)" class="has-scroll">
+          <h3>Código: Arrays (Listas)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Operaciones con Listas</div>
+            <pre><code class="language-python" data-line-numbers="1-4|6-9|11-12"># Arrays (Listas)
+numeros = [1, 2, 3, 4, 5]
+print(numeros[0])        # 1
+print(numeros[1:4])      # [2, 3, 4]
+
+# Modificación (son mutables)
+numeros.append(6)        # [1, 2, 3, 4, 5, 6]
+numeros.remove(3)        # [1, 2, 4, 5, 6]
+numeros[0] = 10          # [10, 2, 4, 5, 6]
+
+# Lista mixta
+mixta = [1, "texto", 3.14, True]</code></pre>
+          </div>
+        </section>
+      </section>
+
+      <!-- 3. LISTAS ENLAZADAS -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #0e7490 0%, #0891b2 100%)" class="has-scroll">
+          <h2 class="slide-title" style="border-color: #22d3ee;">3️⃣ Listas Enlazadas</h2>
+          <p class="author-tag">👤 Pablo Rojas</p>
+          
+          <div class="highlight-box fragment">
+            <h3>Características</h3>
+            <ul class="compact">
+              <li>Estructuras dinámicas formadas por <strong>nodos</strong></li>
+              <li>Cada nodo contiene: dato + referencia al siguiente</li>
+              <li>No requieren memoria contigua</li>
+              <li>Eficientes para inserciones/eliminaciones frecuentes</li>
+            </ul>
+          </div>
+
+          <div class="fragment" style="margin-top: 1em;">
+            <h3>Tipos</h3>
+            <ul class="compact">
+              <li><strong>Simple:</strong> Cada nodo → siguiente (A → B → C → None)</li>
+              <li><strong>Doble:</strong> Cada nodo ⇄ anterior y siguiente</li>
+            </ul>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #0e7490 0%, #0891b2 100%)" class="has-scroll">
+          <h3>Código: Lista Simple (Parte 1)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Nodo y Estructura</div>
+            <pre><code class="language-python" data-line-numbers="1-5|7-25"># Clase Nodo
+class Nodo:
+    def __init__(self, materia):
+        self.materia = materia
+        self.siguiente = None
+
+# Clase Lista Enlazada Simple
+class ListaEnlazadaSimple:
+    def __init__(self):
+        self.cabeza = None
+
+    def agregar(self, materia):
+        nuevo = Nodo(materia)
+        if not self.cabeza:
+            self.cabeza = nuevo
+        else:
+            actual = self.cabeza
+            while actual.siguiente:
+                actual = actual.siguiente
+            actual.siguiente = nuevo
+
+    def mostrar(self):
+        actual = self.cabeza
+        while actual:
+            print(actual.materia, end=" -> ")
+            actual = actual.siguiente
+        print("None")</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #0e7490 0%, #0891b2 100%)" class="has-scroll">
+          <h3>Código: Lista Simple (Parte 2)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Operaciones Adicionales</div>
+            <pre><code class="language-python" data-line-numbers="1-11|13-25">    def mostrar_posicion(self, pos):
+        actual = self.cabeza
+        i = 0
+        while actual:
+            if i == pos:
+                print(actual.materia)
+                return
+            actual = actual.siguiente
+            i += 1
+        print("Posición fuera de rango")
+
+    def modificar(self, pos, nueva_materia):
+        actual = self.cabeza
+        i = 0
+        while actual:
+            if i == pos:
+                actual.materia = nueva_materia
+                return
+            actual = actual.siguiente
+            i += 1
+
+    def eliminar(self, materia):
+        actual = self.cabeza
+        anterior = None
+        while actual:
+            if actual.materia == materia:
+                if anterior:
+                    anterior.siguiente = actual.siguiente
+                else:
+                    self.cabeza = actual.siguiente
+                return
+            anterior = actual
+            actual = actual.siguiente</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #0e7490 0%, #0891b2 100%)" class="has-scroll">
+          <h3>Código: Uso de Lista Simple</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Ejemplo de Uso</div>
+            <pre><code class="language-python" data-line-numbers="1-7|9-16"># Uso de la lista enlazada simple
+materias = ListaEnlazadaSimple()
+materias.agregar("Fisica")
+materias.agregar("Investigacion de operaciones")
+materias.agregar("Sistemas operativos")
+materias.agregar("Estructura de datos")
+materias.mostrar()  # Fisica -> Inv... -> Sist... -> None
+
+# Operaciones
+materias.mostrar_posicion(0)  # Fisica
+materias.modificar(3, "Tutorias")
+materias.eliminar("Fisica")
+materias.mostrar()
+
+# Salida:
+# Investigacion de operaciones -> ... -> None</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #0e7490 0%, #0891b2 100%)" class="has-scroll">
+          <h3>Código: Lista Doble</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Lista Doblemente Enlazada</div>
+            <pre><code class="language-python" data-line-numbers="1-5|7-20"># Clase Nodo Doble
+class NodoDoble:
+    def __init__(self, materia):
+        self.materia = materia
+        self.siguiente = None
+        self.anterior = None
+
+class ListaDobleMaterias:
+    def __init__(self):
+        self.cabeza = None
+
+    def agregar(self, materia):
+        nuevo = NodoDoble(materia)
+        if not self.cabeza:
+            self.cabeza = nuevo
+        else:
+            actual = self.cabeza
+            while actual.siguiente:
+                actual = actual.siguiente
+            actual.siguiente = nuevo
+            nuevo.anterior = actual
+
+    def mostrar_adelante(self):
+        actual = self.cabeza
+        while actual:
+            print(actual.materia, end=" ↔ ")
+            actual = actual.siguiente
+        print("None")</code></pre>
+          </div>
+        </section>
+      </section>
+
+      <!-- 4. PILAS -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #9f1239 0%, #be123c 100%)" class="has-scroll">
+          <h2 class="slide-title" style="border-color: #fb7185;">4️⃣ Pilas (Stacks)</h2>
+          <p class="author-tag">👤 Haziel Ramírez</p>
+          
+          <div class="highlight-box fragment">
+            <h3>Principio LIFO</h3>
+            <p><strong>Last In, First Out</strong> — El último en entrar es el primero en salir</p>
+          </div>
+
+          <div class="grid-2 fragment">
+            <div>
+              <h4>Operaciones</h4>
+              <ul class="compact">
+                <li><code>push()</code> — Agregar al tope</li>
+                <li><code>pop()</code> — Quitar del tope</li>
+                <li><code>peek()</code> — Ver el tope</li>
+                <li><code>is_empty()</code> — Verificar vacía</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Aplicaciones</h4>
+              <ul class="compact">
+                <li>Colas de impresión</li>
+                <li>Procesos del sistema</li>
+                <li>Manejo de solicitudes</li>
+                <li>BFS en grafos</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="visual-demo fragment">
+            <h4 style="text-align: center; margin-bottom: 15px;">Visualización de Cola</h4>
+            <div class="queue-visual">
+              <div style="font-weight: bold;">FRONT →</div>
+              <div class="queue-item">Trabajo 1</div>
+              <div class="queue-item">Trabajo 2</div>
+              <div class="queue-item">Trabajo 3</div>
+              <div class="queue-item">Trabajo 4</div>
+              <div style="font-weight: bold;">← REAR</div>
+            </div>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #075985 0%, #0369a1 100%)" class="has-scroll">
+          <h3>Código: Implementación de Cola</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Clase Cola</div>
+            <pre><code class="language-python" data-line-numbers="1-7|9-17|19-29"># Clase Cola
+class Cola:
+    def __init__(self):
+        self.items = []
+
+    def esta_vacia(self):
+        """Devuelve True si la cola está vacía"""
+        return len(self.items) == 0
+
+    def encolar(self, elemento):
+        """Agrega un elemento al final de la cola"""
+        self.items.append(elemento)
+
+    def desencolar(self):
+        """Saca el primer elemento de la cola"""
+        if self.esta_vacia():
+            print("La cola está vacía")
+            return None
+        return self.items.pop(0)  # Elimina el primero
+
+    def ver_primero(self):
+        """Devuelve el primer elemento sin quitarlo"""
+        if self.esta_vacia():
+            return None
+        return self.items[0]
+
+    def tamaño(self):
+        """Devuelve el número de elementos"""
+        return len(self.items)
+
+    def __str__(self):
+        """Representación en texto"""
+        return f"Cola: {self.items}"</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #075985 0%, #0369a1 100%)" class="has-scroll">
+          <h3>Código: Uso de Cola</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Ejemplo de Uso</div>
+            <pre><code class="language-python" data-line-numbers="1-9|11-19"># Crear cola y agregar clientes
+cola = Cola()
+cola.encolar("Cliente 1")
+cola.encolar("Cliente 2")
+cola.encolar("Cliente 3")
+
+print(cola)  # Cola: ['Cliente 1', 'Cliente 2', 'Cliente 3']
+print("Tamaño:", cola.tamaño())  # 3
+print("Primero:", cola.ver_primero())  # Cliente 1
+
+# Atender clientes (FIFO)
+atendido = cola.desencolar()
+print("Atendiendo:", atendido)  # Cliente 1
+
+print(cola)  # Cola: ['Cliente 2', 'Cliente 3']
+print("Siguiente:", cola.ver_primero())  # Cliente 2
+
+# Nota: Para mejor eficiencia, usar collections.deque
+# from collections import deque
+# cola = deque()
+# cola.append(x)  # encolar
+# cola.popleft()  # desencolar (O(1) en lugar de O(n))</code></pre>
+          </div>
+        </section>
+      </section>
+
+      <!-- 6. CONJUNTOS Y DICCIONARIOS -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #065f46 0%, #047857 100%)" class="has-scroll">
+          <h2 class="slide-title" style="border-color: #34d399;">6️⃣ Conjuntos y Diccionarios</h2>
+          <p class="author-tag">👤 Luis Quiroz</p>
+          
+          <div class="grid-2">
+            <div class="fragment">
+              <h3>Conjuntos (set)</h3>
+              <ul class="compact">
+                <li>Sin elementos duplicados</li>
+                <li>No mantienen orden</li>
+                <li>Operaciones matemáticas: ∪, ∩, -</li>
+                <li>Búsqueda rápida O(1)</li>
+              </ul>
+            </div>
+            
+            <div class="fragment">
+              <h3>Diccionarios (dict)</h3>
+              <ul class="compact">
+                <li>Pares clave-valor</li>
+                <li>Claves únicas</li>
+                <li>Acceso O(1) por clave</li>
+                <li>Implementados con hash tables</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="highlight-box fragment" style="margin-top: 1em;">
+            <h4>Casos de uso</h4>
+            <p><strong>Sets:</strong> Eliminar duplicados, membresía rápida, operaciones de conjuntos</p>
+            <p><strong>Dicts:</strong> Cachés, contadores, índices, configuraciones, mapeo de datos</p>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #065f46 0%, #047857 100%)" class="has-scroll">
+          <h3>Código: Conjuntos</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Operaciones con Sets</div>
+            <pre><code class="language-python" data-line-numbers="1-4|6-10|12-16"># Definir conjuntos
+frutas_hoy = {"manzana", "plátano", "naranja", "mango"}
+frutas_almacen = {"manzana", "pera", "sandía", "mango"}
+
+# Operaciones de conjuntos
+nuevas_frutas = frutas_hoy - frutas_almacen  # Diferencia
+print("Frutas nuevas:", nuevas_frutas)  # {'plátano', 'naranja'}
+
+repetidas = frutas_hoy & frutas_almacen  # Intersección
+print("Frutas repetidas:", repetidas)  # {'manzana', 'mango'}
+
+todas = frutas_hoy | frutas_almacen  # Unión
+print("Todas las frutas:", todas)
+
+# Eliminar duplicados de una lista
+numeros = [1, 2, 2, 3, 3, 3, 4, 5, 5]
+sin_duplicados = list(set(numeros))  # [1, 2, 3, 4, 5]</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #065f46 0%, #047857 100%)" class="has-scroll">
+          <h3>Código: Diccionarios (Parte 1)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Operaciones con Diccionarios</div>
+            <pre><code class="language-python" data-line-numbers="1-8|10-14|16-21"># Crear diccionario
+inventario = {
+    "manzana": 25,
+    "plátano": 18,
+    "naranja": 30,
+    "mango": 12,
+    "pera": 10
+}
+
+# Acceso y modificación
+print(inventario["naranja"])  # 30
+inventario["mango"] += 5  # Incrementar
+inventario["uva"] = 20    # Agregar nueva clave
+del inventario["pera"]    # Eliminar
+
+# Métodos útiles
+print(inventario.keys())    # Todas las claves
+print(inventario.values())  # Todos los valores
+print(inventario.items())   # Pares clave-valor
+
+# Verificar existencia
+if "manzana" in inventario:
+    print("Hay manzanas disponibles")</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #065f46 0%, #047857 100%)" class="has-scroll">
+          <h3>Código: Diccionarios (Parte 2)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Ejemplo Completo</div>
+            <pre><code class="language-python" data-line-numbers="1-10|12-14|16-21"># Actualizar inventario con nuevas frutas
+nuevas_frutas = {"plátano", "naranja"}
+
+for fruta in nuevas_frutas:
+    if fruta in inventario:
+        inventario[fruta] += 15
+    else:
+        inventario[fruta] = 15
+
+print("\nInventario actualizado:")
+for fruta, cantidad in inventario.items():
+    print(f"{fruta}: {cantidad} kg")
+
+# Salida:
+# manzana: 25 kg
+# plátano: 33 kg
+# naranja: 45 kg
+# mango: 17 kg
+# uva: 20 kg
+
+# Diccionarios anidados
+estudiante = {
+    "nombre": "Ana",
+    "edad": 20,
+    "materias": ["Python", "Matemáticas"],
+    "calificaciones": {"Python": 95, "Matemáticas": 88}
+}</code></pre>
+          </div>
+        </section>
+      </section>
+
+      <!-- 7. ÁRBOLES -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #92400e 0%, #b45309 100%)" class="has-scroll">
+          <h2 class="slide-title" style="border-color: #fbbf24;">7️⃣ Árboles (Trees)</h2>
+          <p class="author-tag">👤 Jesús Alvarado</p>
+          
+          <div class="highlight-box fragment">
+            <h3>Estructura Jerárquica</h3>
+            <p>Estructura de datos no lineal formada por nodos conectados mediante relaciones padre-hijo.</p>
+          </div>
+
+          <div class="fragment">
+            <h3>Conceptos clave</h3>
+            <ul class="compact">
+              <li><strong>Raíz:</strong> Nodo principal del árbol</li>
+              <li><strong>Padre/Hijo:</strong> Relaciones entre nodos conectados</li>
+              <li><strong>Hoja:</strong> Nodo sin hijos</li>
+              <li><strong>Altura:</strong> Número de niveles del árbol</li>
+              <li><strong>Subárbol:</strong> Árbol formado por un nodo y sus descendientes</li>
+            </ul>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #92400e 0%, #b45309 100%)" class="has-scroll">
+          <h3>Árbol Binario de Búsqueda (BST)</h3>
+          
+          <div class="highlight-box">
+            <h4>Propiedad BST</h4>
+            <p>Para cada nodo:</p>
+            <ul class="compact">
+              <li>Valores del subárbol izquierdo son <strong>menores</strong></li>
+              <li>Valores del subárbol derecho son <strong>mayores</strong></li>
+            </ul>
+          </div>
+
+          <div class="tree-visual fragment">
+            <svg viewBox="0 0 520 300" style="max-width: 600px; height: auto;">
+              <line x1="260" y1="40" x2="160" y2="110" stroke="#fbbf24" stroke-width="3"/>
+              <line x1="260" y1="40" x2="360" y2="110" stroke="#fbbf24" stroke-width="3"/>
+              <line x1="160" y1="110" x2="110" y2="190" stroke="#fbbf24" stroke-width="3"/>
+              <line x1="160" y1="110" x2="210" y2="190" stroke="#fbbf24" stroke-width="3"/>
+              <line x1="360" y1="110" x2="310" y2="190" stroke="#fbbf24" stroke-width="3"/>
+              <line x1="360" y1="110" x2="410" y2="190" stroke="#fbbf24" stroke-width="3"/>
+              
+              <circle cx="260" cy="40" r="28" fill="#f59e0b" stroke="#fff" stroke-width="3"/>
+              <text x="260" y="48" font-size="18" font-weight="bold" text-anchor="middle" fill="#fff">6</text>
+              
+              <circle cx="160" cy="110" r="26" fill="#f97316" stroke="#fff" stroke-width="3"/>
+              <text x="160" y="118" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">4</text>
+              
+              <circle cx="360" cy="110" r="26" fill="#f97316" stroke="#fff" stroke-width="3"/>
+              <text x="360" y="118" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">8</text>
+              
+              <circle cx="110" cy="190" r="22" fill="#fb923c" stroke="#fff" stroke-width="2"/>
+              <text x="110" y="197" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">1</text>
+              
+              <circle cx="210" cy="190" r="22" fill="#fb923c" stroke="#fff" stroke-width="2"/>
+              <text x="210" y="197" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">5</text>
+              
+              <circle cx="310" cy="190" r="22" fill="#fb923c" stroke="#fff" stroke-width="2"/>
+              <text x="310" y="197" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">7</text>
+              
+              <circle cx="410" cy="190" r="22" fill="#fb923c" stroke="#fff" stroke-width="2"/>
+              <text x="410" y="197" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">9</text>
+            </svg>
+          </div>
+
+          <p class="fragment" style="text-align: center; margin-top: 1em; font-size: 0.9em;">
+            <strong>Recorridos DFS:</strong> In-order (1,4,5,6,7,8,9) • Pre-order (6,4,1,5,8,7,9) • Post-order (1,5,4,7,9,8,6)
+          </p>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #92400e 0%, #b45309 100%)" class="has-scroll">
+          <h3>Código: BST (Parte 1 - Estructura)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Clases Node y BST</div>
+            <pre><code class="language-python" data-line-numbers="1-5|7-25"># Clase Nodo
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+# Clase Árbol Binario de Búsqueda
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, value):
+        """Inserta un valor manteniendo la propiedad BST"""
+        if self.root is None:
+            self.root = Node(value)
+        else:
+            self._insert_recursive(self.root, value)
+
+    def _insert_recursive(self, current_node, value):
+        if value < current_node.value:
+            if current_node.left is None:
+                current_node.left = Node(value)
+            else:
+                self._insert_recursive(current_node.left, value)
+        elif value > current_node.value:
+            if current_node.right is None:
+                current_node.right = Node(value)
+            else:
+                self._insert_recursive(current_node.right, value)</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #92400e 0%, #b45309 100%)" class="has-scroll">
+          <h3>Código: BST (Parte 2 - Recorridos)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Métodos de Recorrido DFS</div>
+            <pre><code class="language-python" data-line-numbers="1-11|13-22|24-32">    def in_order(self):
+        """Recorrido In-order: Izq -> Raíz -> Der"""
+        print("In-order:", end=" ")
+        self._in_order_recursive(self.root)
+        print()
+
+    def _in_order_recursive(self, node):
+        if node:
+            self._in_order_recursive(node.left)
+            print(node.value, end=" ")
+            self._in_order_recursive(node.right)
+
+    def pre_order(self):
+        """Recorrido Pre-order: Raíz -> Izq -> Der"""
+        print("Pre-order:", end=" ")
+        self._pre_order_recursive(self.root)
+        print()
+
+    def _pre_order_recursive(self, node):
+        if node:
+            print(node.value, end=" ")
+            self._pre_order_recursive(node.left)
+            self._pre_order_recursive(node.right)
+
+    def post_order(self):
+        """Recorrido Post-order: Izq -> Der -> Raíz"""
+        print("Post-order:", end=" ")
+        self._post_order_recursive(self.root)
+        print()
+
+    def _post_order_recursive(self, node):
+        if node:
+            self._post_order_recursive(node.left)
+            self._post_order_recursive(node.right)
+            print(node.value, end=" ")</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #92400e 0%, #b45309 100%)" class="has-scroll">
+          <h3>Código: BST (Parte 3 - Uso)</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Ejemplo Completo</div>
+            <pre><code class="language-python" data-line-numbers="1-10|12-21"># Crear el árbol BST
+bst = BinarySearchTree()
+
+# Insertar valores
+values_to_insert = [6, 4, 8, 1, 5, 9, 7]
+print(f"Insertando valores: {values_to_insert}")
+
+for value in values_to_insert:
+    bst.insert(value)
+
+print("\n--- Resultados de Recorridos ---")
+
+# In-order: Da los elementos ordenados
+bst.in_order()
+# Salida: In-order: 1 4 5 6 7 8 9
+
+# Pre-order: Útil para copiar el árbol
+bst.pre_order()
+# Salida: Pre-order: 6 4 1 5 8 7 9
+
+# Post-order: Útil para eliminar el árbol
+bst.post_order()
+# Salida: Post-order: 1 5 4 7 9 8 6</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #92400e 0%, #b45309 100%)" class="has-scroll">
+          <h3>Aplicaciones de Árboles</h3>
+          
+          <div class="grid-2">
+            <div class="fragment">
+              <h4>BST</h4>
+              <ul class="compact">
+                <li>Búsqueda eficiente</li>
+                <li>Ordenamiento</li>
+                <li>Índices de bases de datos</li>
+                <li>Autocompletado</li>
+              </ul>
+            </div>
+            
+            <div class="fragment">
+              <h4>Otros tipos</h4>
+              <ul class="compact">
+                <li><strong>Heap:</strong> Colas de prioridad</li>
+                <li><strong>Trie:</strong> Búsqueda de texto</li>
+                <li><strong>B-Tree:</strong> Sistemas de archivos</li>
+                <li><strong>Red-Black:</strong> Balanceo automático</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="highlight-box fragment" style="margin-top: 1em;">
+            <p><strong>Ventajas:</strong> Búsqueda O(log n) en promedio, inserción/eliminación eficientes</p>
+            <p><strong>Desventajas:</strong> Pueden desbalancearse (peor caso O(n)), requieren más memoria que arrays</p>
+          </div>
+        </section>
+      </section>
+
+      <!-- CONCLUSIONES -->
+      <section data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+        <h2 class="slide-title" style="border-color: var(--secondary);">✅ Conclusiones</h2>
+        
+        <div class="highlight-box fragment">
+          <h3>Resumen de Estructuras</h3>
+          <ul class="compact">
+            <li><strong>Arrays/Listas:</strong> Acceso rápido por índice, búsqueda secuencial</li>
+            <li><strong>Listas Enlazadas:</strong> Inserciones/eliminaciones eficientes, sin acceso directo</li>
+            <li><strong>Pilas:</strong> LIFO, ideal para recursión y deshacer/rehacer</li>
+            <li><strong>Colas:</strong> FIFO, perfectas para procesos y planificación</li>
+            <li><strong>Sets/Dicts:</strong> Búsqueda O(1), sin duplicados, mapeo clave-valor</li>
+            <li><strong>Árboles:</strong> Búsqueda jerárquica eficiente, recorridos especiales</li>
+          </ul>
+        </div>
+
+        <div class="fragment" style="margin-top: 1.5em;">
+          <h3>Criterios de Selección</h3>
+          <div class="grid-2">
+            <div>
+              <h4>Considera usar:</h4>
+              <ul class="compact">
+                <li><strong>Lista:</strong> Si necesitas orden y acceso por índice</li>
+                <li><strong>Set:</strong> Si necesitas unicidad y búsqueda rápida</li>
+                <li><strong>Dict:</strong> Si mapeas claves a valores</li>
+                <li><strong>Pila/Cola:</strong> Si el orden de procesamiento importa</li>
+                <li><strong>Árbol:</strong> Si los datos son jerárquicos</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Factores clave:</h4>
+              <ul class="compact">
+                <li>Frecuencia de operaciones</li>
+                <li>Requisitos de memoria</li>
+                <li>Complejidad temporal</li>
+                <li>Naturaleza de los datos</li>
+                <li>Facilidad de implementación</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p class="fragment" style="text-align: center; margin-top: 2em; font-size: 0.9em;">
+          <strong>💡 Recuerda:</strong> No existe una estructura "mejor", solo la más adecuada para cada problema.
+        </p>
+      </section>
+
+      <!-- RECURSOS Y PRÁCTICA -->
+      <section data-background-gradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">
+        <h2 class="slide-title" style="border-color: var(--secondary);">📚 Recursos y Práctica</h2>
+        
+        <div class="highlight-box fragment">
+          <h3>Para seguir aprendiendo</h3>
+          <ul class="compact">
+            <li><strong>Python Docs:</strong> Documentación oficial de estructuras de datos</li>
+            <li><strong>LeetCode/HackerRank:</strong> Problemas prácticos de algoritmos</li>
+            <li><strong>Visualgo.net:</strong> Visualizaciones interactivas de estructuras</li>
+            <li><strong>Big-O Cheat Sheet:</strong> Complejidades de operaciones</li>
+          </ul>
+        </div>
+
+        <div class="grid-2 fragment" style="margin-top: 1.5em;">
+          <div class="intro-card">
+            <h4>Práctica Recomendada</h4>
+            <ul class="compact">
+              <li>Implementa cada estructura desde cero</li>
+              <li>Resuelve problemas incrementales</li>
+              <li>Analiza la complejidad de tus soluciones</li>
+              <li>Compara con librerías estándar</li>
+            </ul>
+          </div>
+          
+          <div class="intro-card">
+            <h4>Próximos Pasos</h4>
+            <ul class="compact">
+              <li>Grafos y algoritmos de grafos</li>
+              <li>Tablas hash avanzadas</li>
+              <li>Árboles balanceados (AVL, RB)</li>
+              <li>Algoritmos de ordenamiento</li>
+            </ul>
+          </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 2em; font-size: 0.8em; opacity: 0.8;">
+          © 2024 Guía de Estructuras de Datos en Python<br>
+          Desarrollado para propósitos educativos
+        </p>
+      </section>
+
+      <!-- SLIDE FINAL -->
+      <section data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+        <h1 style="font-size: 3em; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">¡Gracias!</h1>
+        <h3 style="margin-top: 1em;">¿Preguntas?</h3>
+        
+        <div style="margin-top: 3em; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px;">
+          <p style="font-size: 1.2em; margin-bottom: 1em;">
+            <strong>Equipo de Desarrollo:</strong>
+          </p>
+          <p style="font-size: 0.9em; line-height: 1.8;">
+            Dayeli Ventura • Saulo León • Pablo Rojas<br>
+            Haziel Ramírez • Axel Rodríguez<br>
+            Luis Quiroz • Jesús Alvarado
+          </p>
+        </div>
+
+        <p style="margin-top: 2em; font-size: 0.8em; opacity: 0.7;">
+          Presiona ESC para vista general de todas las diapositivas
+        </p>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+
+  <script>
+    Reveal.initialize({
+      hash: true,
+      transition: 'slide',
+      transitionSpeed: 'default',
+      slideNumber: 'c/t',
+      showSlideNumber: 'all',
+      controls: true,
+      progress: true,
+      center: true,
+      overview: true,
+      keyboard: true,
+      touch: true,
+      loop: false,
+      rtl: false,
+      fragments: true,
+      embedded: false,
+      help: true,
+      showNotes: false,
+      autoPlayMedia: null,
+      preloadIframes: null,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      minScale: 0.2,
+      maxScale: 2.0,
+      plugins: [ RevealHighlight, RevealNotes ],
+      
+      highlight: {
+        highlightOnLoad: true,
+        escapeHTML: true
+      }
+    });
+
+    // Animaciones personalizadas para elementos
+    Reveal.on('slidechanged', event => {
+      // Agregar clase de animación cuando cambie de slide
+      const currentSlide = event.currentSlide;
+      currentSlide.classList.add('slide-active');
+    });
+
+    // Keyboard shortcuts personalizados
+    Reveal.addKeyBinding({keyCode: 72, key: 'H', description: 'Toggle help'}, () => {
+      alert('Atajos de teclado:\n→/Espacio: Siguiente\n←: Anterior\nESC: Vista general\nF: Pantalla completa\nS: Notas del presentador');
+    });
+  </script>
+</body>
+</html>()</code> — Verificar vacía</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Aplicaciones</h4>
+              <ul class="compact">
+                <li>Control de recursión</li>
+                <li>Deshacer/Rehacer</li>
+                <li>Evaluación de expresiones</li>
+                <li>Navegación (historial)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="visual-demo fragment">
+            <h4 style="text-align: center; margin-bottom: 15px;">Visualización de Pila</h4>
+            <div class="stack-visual">
+              <div class="stack-item">Documento C</div>
+              <div class="stack-item">Documento B</div>
+              <div class="stack-item">Documento A</div>
+              <p style="margin-top: 10px; text-align: center;">⬆️ Tope (LIFO)</p>
+            </div>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #9f1239 0%, #be123c 100%)" class="has-scroll">
+          <h3>Código: Implementación de Pila</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Clase Pila</div>
+            <pre><code class="language-python" data-line-numbers="1-5|7-16|18-30"># Clase Nodo
+class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+
+# Clase Pila
+class Pila:
+    def __init__(self):
+        self.tope = None
+
+    def esta_vacia(self):
+        return self.tope is None
+
+    def push(self, dato):
+        """Agrega un elemento al tope"""
+        nuevo_nodo = Nodo(dato)
+        nuevo_nodo.siguiente = self.tope
+        self.tope = nuevo_nodo
+
+    def pop(self):
+        """Elimina y devuelve el elemento del tope"""
+        if self.esta_vacia():
+            print("La pila está vacía.")
+            return None
+        dato = self.tope.dato
+        self.tope = self.tope.siguiente
+        return dato
+
+    def ver_tope(self):
+        """Ver el elemento superior sin eliminarlo"""
+        if self.esta_vacia():
+            return None
+        return self.tope.dato</code></pre>
+          </div>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #9f1239 0%, #be123c 100%)" class="has-scroll">
+          <h3>Código: Uso de Pila</h3>
+          <div class="code-section">
+            <div class="code-label">💻 Ejemplo de Uso</div>
+            <pre><code class="language-python" data-line-numbers="1-9|11-15"># Crear pila y agregar elementos
+pila = Pila()
+pila.push("A")
+pila.push("B")
+pila.push("C")
+
+# Estado actual: C (tope) -> B -> A
+print("Tope:", pila.ver_tope())  # C
+print("Tamaño:", 3)
+
+# Eliminar elemento
+elemento = pila.pop()  # Devuelve 'C'
+print("Elemento sacado:", elemento)
+
+# Ahora el tope es 'B'
+print("Nuevo tope:", pila.ver_tope())  # B</code></pre>
+          </div>
+        </section>
+      </section>
+
+      <!-- 5. COLAS -->
+      <section>
+        <section data-background-gradient="linear-gradient(135deg, #075985 0%, #0369a1 100%)" class="has-scroll">
+          <h2 class="slide-title" style="border-color: #38bdf8;">5️⃣ Colas (Queues)</h2>
+          <p class="author-tag">👤 Axel Rodríguez</p>
+          
+          <div class="highlight-box fragment">
+            <h3>Principio FIFO</h3>
+            <p><strong>First In, First Out</strong> — El primero en entrar es el primero en salir</p>
+          </div>
+
+          <div class="grid-2 fragment">
+            <div>
+              <h4>Operaciones</h4>
+              <ul class="compact">
+                <li><code>enqueue()</code> — Agregar al final</li>
+                <li><code>dequeue()</code> — Quitar del frente</li>
+                <li><code>peek()</code> — Ver el frente</li>
+                <li><code>is_empty
